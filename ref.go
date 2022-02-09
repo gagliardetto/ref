@@ -27,7 +27,7 @@ func DeduplicateSlice(slice interface{}, fn func(i int) string) interface{} {
 			id := fn(i)
 			if !storeIndex.Has(id) {
 				result = reflect.Append(result, rv.Index(i))
-				storeIndex.OrderedAppend(id)
+				storeIndex.Add(id)
 			}
 		}
 	default:
@@ -58,7 +58,7 @@ func DeduplicateSlice2(slicePtr interface{}, fn func(i int) string) {
 		for i := 0; i < rv.Len(); i++ {
 			id := fn(i)
 			if !storeIndex.Has(id) {
-				storeIndex.OrderedAppend(id)
+				storeIndex.Add(id)
 			} else {
 				indexesToRemove = append(indexesToRemove, i)
 			}
@@ -564,7 +564,7 @@ func doUnique(cont interface{}, idGetter interface{}) (interface{}, error) {
 				id := ff.Call(callParams)[0]
 				if !storeIndex.Has(id.String()) {
 					resultSlice = reflect.Append(resultSlice, rv.Index(index))
-					storeIndex.OrderedAppend(id.String())
+					storeIndex.Add(id.String())
 				}
 			}
 			return resultSlice.Interface(), nil
@@ -585,7 +585,7 @@ func doUnique(cont interface{}, idGetter interface{}) (interface{}, error) {
 				id := ff.Call(callParams)[0]
 				if !storeIndex.Has(id.String()) {
 					resultMap.SetMapIndex(key, rv.MapIndex(key))
-					storeIndex.OrderedAppend(id.String())
+					storeIndex.Add(id.String())
 				}
 			}
 			return resultMap.Interface(), nil
